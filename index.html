@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+
+        body {
+            background-color: rgba(0, 0, 0, 1);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            width:100vw;
+            height: 100vh;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto', sans-serif;
+            margin:0px;
+            padding:0px;
+        }
+
+        .background {
+            content: ' ';
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            background-image: url("./background.png");
+            background-repeat: no-repeat;
+            background-position: 50% 0;
+            background-size: cover;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .centerizer {
+            display: flex;
+            flex-direction: column; /* Stacks divs vertically */
+            justify-content: center; /* Centers content vertically */
+            align-items: center; /* Centers content horizontally */
+            height: 100vh; /* Full viewport height, for vertical centering */
+        }
+
+        .div {
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width:128px;
+            width:15vw;
+        }
+
+        .image-container img {
+            display:flex;
+            width: 100%; /* Fixed width of 256 pixels */
+            height: 100%;
+            transform-origin: center;
+            transition: transform 0.0s;
+        }
+
+        .button {
+            display: block;
+            background-color: white;
+            border-radius: 30px;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: 0px;
+            font-weight:900;
+            transition: transform 0.2s;
+        }
+
+        .button:hover {
+            transform: scale(1.1,1.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-container2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height:10vw;
+            max-height:64px;
+            margin-bottom: 24px;
+        }
+
+        .logo {
+            display:flex;
+            width: 100%; /* Fixed width of 256 pixels */
+            max-height: auto;
+            transform-origin: center;
+            transform: rotateX(calc(clamp(-15,var(--rel-y),15) * 1deg)) rotateY(calc(clamp(-15,var(--rel-x),15) * 1deg));
+            transition: transform 0.2s;
+            padding-left:1vw;
+            padding-right:1vw;
+        }
+
+        .logo:hover {
+            transform: scale(1.1,1.1);
+        }
+
+        .title-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .title {
+            font-size: 9px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+        }
+
+        .image {
+            transition: transform 0.2s;
+        }
+
+        .houses {
+            display: flex;
+            flex-direction: column; /* Stacks divs vertically */
+            justify-content: center; /* Centers content vertically */
+            align-items: center; /* Centers content horizontally */
+        }
+
+        /* Keyframes for the fade-in animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0; /* Start with zero opacity */
+            }
+            100% {
+                opacity: 1; /* End with full opacity */
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 0.8s forwards; /* Apply the animation */
+        }
+
+        .fade-in2 {
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 1.2s forwards; /* Apply the animation */
+        }
+
+
+    </style>
+</head>
+<body>
+    <div id="background" class="background"></div>
+    <div class="centerizer">
+        
+        <div class="image-container">
+            <img class="image" src="CC_Logo_C.png" alt="Image" draggable="true">
+            <img class="image" src="CC_Logo_C.png" alt="Image" draggable="true">
+        </div>
+
+        <div class="houses fade-in">
+            <div class="title-container">
+                <img src="divider.svg" alt="Image" draggable="false">
+            </div>
+
+            <div class="image-container2">
+                <a class="logo" href="https://lu.ma/u/usr-IZ8f41dBh4gG8w3">
+                    <img src="logo_fc.png" alt="Future Circus" draggable="false">
+                </a>
+                <a class="logo" href="https://www.instagram.com/hiit.haus">
+                    <img src="logo_hh.png" alt="Hiit Haus" draggable="false">
+                </a>
+                <a class="logo" href="https://www.instagram.com/twobitcircus">
+                    <img src="logo_tc.png" alt="Two Bit Circus" draggable="false">
+                </a>
+            </div>
+        </div>
+
+        <a href="https://discord.gg/tBJ7Tecv3F">
+            <button id="signup" class="button fade-in2">Apply to Campus</button>
+        </a>
+    </div>
+
+    <script>
+        function posNeg() {
+            const randomNumber = Math.random();
+            const result = randomNumber < 0.5 ? -1 : 1;
+            return result;
+        }
+
+        var initImageDrag = function(image) {
+      
+            let scale = 1;
+            let rX = posNeg();
+            let rY = posNeg();
+            let offsetX = -500*rX +rX*Math.random()*-300;
+            let offsetY = -500*rY +rY*Math.random()*-300;
+            let isDragging = false;
+            let dragStartX, dragStartY;
+
+            image.addEventListener('touchstart', (e) => {
+                image.style.zIndex = "2";
+                if (e.touches.length === 2) {
+                    // Pinch gesture
+                    const initialDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    const initialScale = scale; 
+
+                    image.addEventListener('touchmove', (e) => {
+                        if (e.touches.length === 2) {
+                            const currentDistance = Math.hypot(
+                                e.touches[0].clientX - e.touches[1].clientX,
+                                e.touches[0].clientY - e.touches[1].clientY
+                            );
+                            scale = initialScale * (currentDistance / initialDistance);
+                            image.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                        }
+                    });
+                } else if (e.touches.length === 1) {
+                    // Drag gesture
+                    isDragging = true;
+                    dragStartX = e.touches[0].clientX - offsetX;
+                    dragStartY = e.touches[0].clientY - offsetY;
+
+                    image.addEventListener('touchmove', (e) => {
+                        if (isDragging && e.touches.length === 1) {
+                            offsetX = e.touches[0].clientX - dragStartX;
+                            offsetY = e.touches[0].clientY - dragStartY;
+                            
+                            image.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                        }
+                    });
+
+                    image.addEventListener('touchend', () => {
+                        isDragging = false;
+                    });
+                }
+            });
+
+            var animationFrame;
+            var noSpring = false;
+
+            function springAnimation(targetX, targetY, damping = 0.8, scaling = false, stiffness = 0.2) {
+        
+             
+                noSpring = true;
+                let vx = 0;
+                let vy = 0;
+
+                function update() {
+                    const dx = targetX - offsetX;
+                    const dy = targetY - offsetY;
+                    const ax = dx * stiffness;
+                    const ay = dy * stiffness;
+                    vx += ax;
+                    vy += ay;
+                    vx *= damping;
+                    vy *= damping;
+                    offsetX += vx;
+                    offsetY += vy;
+
+                    if (scaling)
+                        scale = Math.max(0,1-Math.abs(dx/10));
+
+                    image.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+
+                    if (Math.abs(dx) < 0.2 && Math.abs(dy) < 0.2) {
+                        noSpring = false;
+                        cancelAnimationFrame(animationFrame);
+                        image.style.transform = `scale(${scale}) translate(${0}px, ${0}px)`;
+                    } else {
+                        animationFrame = requestAnimationFrame(update);
+                    }
+                }
+
+                animationFrame = requestAnimationFrame(update);
+            }
+
+            var dragging = false;
+
+            image.addEventListener('mousemove', (e) => {
+                if (noSpring)
+                    return;
+                image.style.transition = `transform 0.2s`;
+                image.style.transform = `scale(${1.1})`;
+            });
+
+            image.addEventListener('mouseout', (e) => {
+                if (noSpring)
+                    return;
+                image.style.transition = `transform 0.2s`;
+                image.style.transform = `scale(${1})`;
+            });
+
+            // Handle image drag events for desktop
+            image.addEventListener('dragstart', (e) => {
+                cancelAnimationFrame(animationFrame);
+                image.style.zIndex = "2";
+                e.dataTransfer.setData('text/plain', ''); // Required for drag-and-drop to work in some browsers
+                dragStartX = e.clientX - offsetX;
+                dragStartY = e.clientY - offsetY;
+
+                var img = document.createElement("img");
+                img.src = "./alpha.png";
+                e.dataTransfer.setDragImage(img, 0, 0);
+            });
+
+            image.addEventListener('drag', (e) => {
+                offsetX = e.clientX - dragStartX;
+                offsetY = e.clientY - dragStartY;
+                image.style.transition = `transform 0s`;
+                image.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+            });
+
+            image.addEventListener('dragend', () => {
+                image.style.zIndex = "1";
+                scale = 1;
+                springAnimation(0,0);
+            });
+            image.style.transition = `transform 0s`;
+            image.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+            image.addEventListener('load', () => {
+                springAnimation(0,0,0.2,true,0.8);
+            })
+        }
+
+        const images = document.querySelectorAll('.image');
+        images.forEach((imageElement) => {
+            initImageDrag(imageElement);
+        });
+
+        document.addEventListener("dragover", function( event ) {
+            event.preventDefault();
+        }, false);
+
+        document.addEventListener("mousemove", function() {
+            var fadeDiv = document.querySelector("body")
+            fadeDiv.classList.add("active");
+        });
+
+        const background = document.getElementById("background");
+        const signupButton = document.getElementById("signup");
+
+        signupButton.addEventListener("mousemove", function () {
+            // Add the class to trigger the animation when hovered
+            background.style.opacity = "0.6";
+            background.style.transition = "opacity 2s";
+        });
+
+        signupButton.addEventListener("mouseout", function () {
+            // Add the class to trigger the animation when hovered
+            background.style.opacity = "0";
+            background.style.transition = "opacity 1s";
+        });
+
+        signupButton.onclick = function() {
+            background.style.opacity = "1";
+            background.style.transition = "opacity 0.4s";
+        };
+
+        // const rotationMod = 0.1; // adjust this to rotate further away
+
+        // let rotaters = [].slice.call(document.querySelectorAll('.rotate'))
+        // document.addEventListener('pointermove', e => {
+        
+        // if (rotaters) {
+        //     rotaters.forEach(el => {
+        //     let center = {
+        //         x: el.getBoundingClientRect().left + (el.getBoundingClientRect().width / 2),
+        //         y: el.getBoundingClientRect().top + (el.getBoundingClientRect().height / 2),
+        //     }
+        //     let relCenter = {
+        //         x: e.clientX - center.x,
+        //         y: center.y - e.clientY
+        //     }
+        //     let modCenter = {
+        //         x: relCenter.x * rotationMod,
+        //         y: relCenter.y * rotationMod,
+        //     }
+        //     el.style.setProperty('--rel-x',modCenter.x);
+        //     el.style.setProperty('--rel-y',modCenter.y);
+        //     })
+        // }
+        // }, false);
+
+    </script>
+
+</body>
+</html>
