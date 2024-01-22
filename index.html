@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <head>
     <style>
 
         html {
-
-        -webkit-tap-highlight-color: rgba(0,0,0,0);
-
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
 
 
@@ -22,6 +22,8 @@
             font-family: 'Roboto', sans-serif;
             margin:0px;
             padding:0px;
+            max-width: 100%;
+            overflow: hidden;
         }
 
         .background {
@@ -56,6 +58,7 @@
             flex-direction: column; /* Stacks divs vertically */
             justify-content: center; /* Centers content vertically */
             align-items: center; /* Centers content horizontally */
+            width: 100%;
             height: 100vh; /* Full viewport height, for vertical centering */
         }
 
@@ -75,6 +78,12 @@
             width:15vw;
         }
 
+        @media (max-width: 768px) {
+        .image-container {
+            width: 20vw; /* Set the width to 100% on mobile devices */
+        }
+        }
+
         .image-container img {
             display:flex;
             width: 100%; /* Fixed width of 256 pixels */
@@ -86,6 +95,7 @@
         .button {
             display: block;
             background-color: white;
+            color:black;
             border-radius: 30px;
             font-size: 16px;
             padding: 10px 20px;
@@ -171,6 +181,22 @@
     </style>
 </head>
 <body>
+
+    <audio id="openSfx" controls style="display: none;">
+        <source src="click.wav" type="audio/wav">
+        Your browser does not support the audio element.
+      </audio>
+
+      <audio id="closeSfx" controls style="display: none;">
+        <source src="close.wav" type="audio/wav">
+        Your browser does not support the audio element.
+      </audio>
+
+      <audio id="moveSfx" controls style="display: none;">
+        <source src="open.wav" type="audio/wav">
+        Your browser does not support the audio element.
+      </audio>
+
     <div id="background" class="background"></div>
     <div class="centerizer">
         
@@ -203,6 +229,11 @@
     </div>
 
     <script>
+
+        const openSfx = document.getElementById('openSfx');
+        const closeSfx = document.getElementById('closeSfx');
+        const moveSfx = document.getElementById('moveSfx');
+
         function posNeg() {
             const randomNumber = Math.random();
             const result = randomNumber < 0.5 ? -1 : 1;
@@ -214,8 +245,8 @@
             let scale = 1;
             let rX = posNeg();
             let rY = posNeg();
-            let offsetX = -500*rX +rX*Math.random()*-300;
-            let offsetY = -500*rY +rY*Math.random()*-300;
+            let offsetX = -1000;
+            let offsetY = -1000;
             let isDragging = false;
             let dragStartX, dragStartY;
 
@@ -304,6 +335,10 @@
 
             var dragging = false;
 
+            image.addEventListener('mousedown', (e) => {
+                openSfx.play();
+            });
+
             image.addEventListener('mousemove', (e) => {
                 if (noSpring)
                     return;
@@ -320,6 +355,7 @@
 
             // Handle image drag events for desktop
             image.addEventListener('dragstart', (e) => {
+                //moveSfx.play();
                 cancelAnimationFrame(animationFrame);
                 image.style.zIndex = "2";
                 e.dataTransfer.setData('text/plain', ''); // Required for drag-and-drop to work in some browsers
@@ -339,6 +375,7 @@
             });
 
             image.addEventListener('dragend', () => {
+                closeSfx.play();
                 image.style.zIndex = "1";
                 scale = 1;
                 springAnimation(0,0);
