@@ -38,8 +38,7 @@
             font-family: 'Roboto', sans-serif;
             margin:0px;
             padding:0px;
-            max-width: 100%;
-            overflow: hidden;
+            max-height: 100%;
         }
 
         .background {
@@ -49,7 +48,7 @@
             left: 0;
             top: 0;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             opacity: 0;
             background-image: url("./background.png");
             background-repeat: no-repeat;
@@ -74,7 +73,6 @@
             flex-direction: column; /* Stacks divs vertically */
             justify-content: center; /* Centers content vertically */
             align-items: center; /* Centers content horizontally */
-            width: 100%;
             height: 100vh; /* Full viewport height, for vertical centering */
         }
 
@@ -94,12 +92,6 @@
             width:15vw;
         }
 
-        @media (max-width: 768px) {
-        .image-container {
-            width: 20vw; /* Set the width to 100% on mobile devices */
-        }
-        }
-
         .image-container img {
             display:flex;
             width: 100%; /* Fixed width of 256 pixels */
@@ -111,7 +103,6 @@
         .button {
             display: block;
             background-color: white;
-            color:black;
             border-radius: 30px;
             font-size: 16px;
             padding: 10px 20px;
@@ -197,22 +188,6 @@
     </style>
 </head>
 <body>
-
-    <audio id="openSfx" controls style="display: none;">
-        <source src="click.wav" type="audio/wav">
-        Your browser does not support the audio element.
-      </audio>
-
-      <audio id="closeSfx" controls style="display: none;">
-        <source src="close.wav" type="audio/wav">
-        Your browser does not support the audio element.
-      </audio>
-
-      <audio id="moveSfx" controls style="display: none;">
-        <source src="open.wav" type="audio/wav">
-        Your browser does not support the audio element.
-      </audio>
-
     <div id="background" class="background"></div>
     <div class="centerizer">
         
@@ -233,6 +208,9 @@
                 <a class="logo" href="https://www.instagram.com/hiit.haus">
                     <img src="logo_hh.png" alt="Hiit Haus" draggable="false">
                 </a>
+                <a class="logo" href="https://www.instagram.com/uscreach">
+                    <img src="logo_rc.png" alt="Reach" draggable="false">
+                </a>
                 <a class="logo" href="https://www.instagram.com/twobitcircus">
                     <img src="logo_tc.png" alt="Two Bit Circus" draggable="false">
                 </a>
@@ -240,16 +218,11 @@
         </div>
 
         <a href="https://discord.gg/tBJ7Tecv3F">
-            <button id="signup" class="button fade-in2">Apply to Campus</button>
+            <button id="signup" class="button fade-in2">Join Campus</button>
         </a>
     </div>
 
     <script>
-
-        const openSfx = document.getElementById('openSfx');
-        const closeSfx = document.getElementById('closeSfx');
-        const moveSfx = document.getElementById('moveSfx');
-
         function posNeg() {
             const randomNumber = Math.random();
             const result = randomNumber < 0.5 ? -1 : 1;
@@ -261,8 +234,8 @@
             let scale = 1;
             let rX = posNeg();
             let rY = posNeg();
-            let offsetX = -1000;
-            let offsetY = -1000;
+            let offsetX = -500*rX +rX*Math.random()*-300;
+            let offsetY = -500*rY +rY*Math.random()*-300;
             let isDragging = false;
             let dragStartX, dragStartY;
 
@@ -303,9 +276,6 @@
 
                     image.addEventListener('touchend', () => {
                         isDragging = false;
-                        image.style.zIndex = "1";
-                scale = 1;
-                springAnimation(0,0);
                     });
                 }
             });
@@ -351,10 +321,6 @@
 
             var dragging = false;
 
-            image.addEventListener('mousedown', (e) => {
-                openSfx.play();
-            });
-
             image.addEventListener('mousemove', (e) => {
                 if (noSpring)
                     return;
@@ -371,7 +337,6 @@
 
             // Handle image drag events for desktop
             image.addEventListener('dragstart', (e) => {
-                //moveSfx.play();
                 cancelAnimationFrame(animationFrame);
                 image.style.zIndex = "2";
                 e.dataTransfer.setData('text/plain', ''); // Required for drag-and-drop to work in some browsers
@@ -391,7 +356,6 @@
             });
 
             image.addEventListener('dragend', () => {
-                closeSfx.play();
                 image.style.zIndex = "1";
                 scale = 1;
                 springAnimation(0,0);
